@@ -1,10 +1,11 @@
+import React from "react";
 import { NoteList } from "~/components/NoteList";
 
-type MainPropsType = {
-  openEditor: () => void;
+type MainProps = {
+  setOpen: (state: React.SetStateAction<boolean>) => void;
 };
 
-export function Main() {
+export function Main(props: MainProps) {
   return (
     <main>
       <h1 className="category-title">All notes</h1>
@@ -16,9 +17,10 @@ export function Main() {
       />
       <br />
       <br />
+
       <button>create note</button>
 
-      <NoteList />
+      <NoteList setOpen={props.setOpen} />
     </main>
   );
 }

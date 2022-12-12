@@ -1,22 +1,15 @@
+import React from "react";
 import { Main } from "./partials/Main";
 import { Editor } from "./partials/Editor";
-import React from "react";
 
 export function Application() {
-  const [isEditorOpen, setIsEditorOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+  // React.useEffect(() => {}, []);
 
   return (
     <div className="app">
-      {!isEditorOpen && <Main openEditor={openEditor} />}
-      {isEditorOpen && <Editor closeEditor={closeEditor} />}
+      {!open && <Main setOpen={setOpen} />}
+      {open && <Editor setOpen={setOpen} />}
     </div>
   );
-
-  function openEditor() {
-    setIsEditorOpen((prevOpen) => (prevOpen = true));
-  }
-
-  function closeEditor() {
-    setIsEditorOpen((prevOpen) => (prevOpen = false));
-  }
 }
