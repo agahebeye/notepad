@@ -5,13 +5,22 @@ import { NoteItem } from "~/components/NoteList";
 import type { Note } from "~/types";
 
 type MainProps = {
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  openEditor: () => void;
   notes: Note[];
+  addNote: () => void;
+  setCurrentNoteId: React.Dispatch<React.SetStateAction<string | number>>;
 };
 
 export function Main(props: MainProps) {
   const noteElements = props.notes.map((note) => {
-    return <NoteItem note={note} key={note.id} />;
+    return (
+      <NoteItem
+        note={note}
+        key={note.id}
+        setCurrentNoteId={props.setCurrentNoteId}
+        openEditor={props.openEditor}
+      />
+    );
   });
 
   return (
@@ -28,7 +37,7 @@ export function Main(props: MainProps) {
             />
             <br />
             <br />
-            <button>create note</button>
+            <button onClick={props.addNote}>create note</button>
           </header>
 
           {noteElements}
@@ -36,7 +45,7 @@ export function Main(props: MainProps) {
       ) : (
         <div>
           <div>You have not created any note.</div>
-          <button>create one</button>
+          <button onClick={props.addNote}>create one</button>
         </div>
       )}
     </main>
@@ -45,6 +54,6 @@ export function Main(props: MainProps) {
   function openInEditor(event: React.MouseEvent) {
     event.preventDefault();
     console.log("open in editor");
-    props.setOpen(true);
+    props.openEditor();
   }
 }

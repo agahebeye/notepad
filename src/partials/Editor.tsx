@@ -1,21 +1,48 @@
-// import { useEditor } from "~/providers/EditorProvider";
+import React from "react";
+import type { Note } from "~/types";
+
 type EditorProps = {
-  setOpen: (state: React.SetStateAction<boolean>) => void;
+  currentNote: Note | undefined;
+  closeEditor: () => void;
+  setNotes: React.Dispatch<React.SetStateAction<Note[]>>;
 };
 
-export function Editor(props: EditorProps) {
-  // const { setOpen } = useEditor();
+type EditorInput = HTMLInputElement | HTMLTextAreaElement;
 
+export function Editor(props: EditorProps) {
   return (
     <div className="editor">
-      <button
-        onClick={(event) => {
-          props.setOpen(false);
-        }}
-      >
-        close
-      </button>
-      <h1>editor</h1>
+      <button onClick={props.closeEditor}>close</button>
+
+      <form className="editor--form">
+        <input
+          type="text"
+          placeholder=""
+          name="title"
+          onChange={handleChange}
+          value={props.currentNote?.title}
+        />
+        <br />
+        <textarea
+          name="text"
+          value={props.currentNote?.text}
+          onChange={handleChange}
+        />
+      </form>
     </div>
   );
+
+  function handleChange(event: React.ChangeEvent<EditorInput>) {
+    const { name, value } = event.target;
+
+    props.setNotes((prevNotes) => {
+      const newNotes = prevNotes.map((note) => {
+        return note.id === props.currentNote?.id
+          ? { ...note, [name]: value }
+          : note;
+      });
+
+      return newNotes;
+    });
+  }
 }

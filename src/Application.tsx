@@ -16,10 +16,32 @@ export function Application() {
 
   return (
     <div className="app">
-      {!open && <Main setOpen={setOpen} notes={notes} />}
-      {open && <Editor setOpen={setOpen} currentNote={notes[currentNoteId]} />}
+      {!open && (
+        <Main
+          openEditor={openEditor}
+          notes={notes}
+          addNote={addNote}
+          setCurrentNoteId={setCurrentNoteId}
+        />
+      )}
+
+      {open && (
+        <Editor
+          closeEditor={closeEditor}
+          currentNote={findCurrentNote()}
+          setNotes={setNotes}
+        />
+      )}
     </div>
   );
+
+  function closeEditor() {
+    setOpen(false);
+  }
+
+  function openEditor() {
+    setOpen(true);
+  }
 
   function addNote() {
     const note: Note = {
@@ -31,8 +53,12 @@ export function Application() {
       favourite: false,
     };
 
-    setNotes((prevNotes) => ({ ...prevNotes, note }));
+    setNotes((prevNotes) => [...prevNotes, note]);
     setCurrentNoteId(note.id);
-    setOpen(true);
+    openEditor();
+  }
+
+  function findCurrentNote() {
+    return notes.find((note) => note.id === currentNoteId);
   }
 }
