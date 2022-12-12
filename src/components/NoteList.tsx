@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
-// import { useEditor } from "~/providers/EditorProvider";
+import type { Note } from "~/types";
+
 type NoteListProps = {
-  setOpen: (state: React.SetStateAction<boolean>) => void;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export function NoteList(props: NoteListProps) {
@@ -38,4 +39,18 @@ export function NoteList(props: NoteListProps) {
     console.log("open in editor");
     props.setOpen(true);
   }
+}
+
+export function NoteItem(props: { note: Note }) {
+  return (
+    <article className="note">
+      <h3 className="note--tile">
+        <a href="#" onClick={(event) => console.log("you clicked me")}>
+          Memories
+        </a>
+      </h3>
+      <div className="note--description">Lorem, ipsum dolor.</div>
+      <div className="note--date">December 10</div>
+    </article>
+  );
 }
