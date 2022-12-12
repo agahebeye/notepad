@@ -4,7 +4,7 @@ type MainPropsType = {
   openEditor: () => void;
 };
 
-export function Main(props: MainPropsType) {
+export function Main() {
   return (
     <main>
       <h1 className="category-title">All notes</h1>
