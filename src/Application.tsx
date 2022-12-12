@@ -1,18 +1,22 @@
-import {Main} from './components/Main';
-import {Editor} from './components/Editor';
+import { Main } from "./partials/Main";
+import { Editor } from "./partials/Editor";
+import React from "react";
 
 export function Application() {
-  /* - Categories
-            - list of note
-        - search notes box
-        - list of notes
-        - create note
-        - note editor
-    */
+  const [isEditorOpen, setIsEditorOpen] = React.useState(false);
+
   return (
     <div className="app">
-      <Main />
-      <Editor />
+      {!isEditorOpen && <Main openEditor={openEditor} />}
+      {isEditorOpen && <Editor closeEditor={closeEditor} />}
     </div>
   );
+
+  function openEditor() {
+    setIsEditorOpen((prevOpen) => (prevOpen = true));
+  }
+
+  function closeEditor() {
+    setIsEditorOpen((prevOpen) => (prevOpen = false));
+  }
 }

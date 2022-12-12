@@ -1,6 +1,10 @@
-import { NoteList } from "./NoteList";
+import { NoteList } from "~/components/NoteList";
 
-export function Main() {
+type MainPropsType = {
+  openEditor: () => void;
+};
+
+export function Main(props: MainPropsType) {
   return (
     <main>
       <h1 className="category-title">All notes</h1>
