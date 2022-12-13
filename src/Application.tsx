@@ -16,21 +16,28 @@ export function Application() {
 
   return (
     <div className="app">
-      {!open && (
-        <Main
-          openEditor={openEditor}
-          notes={notes}
-          addNote={addNote}
-          setCurrentNoteId={setCurrentNoteId}
-        />
-      )}
+      {notes.length > 0 ? (
+        <React.Fragment>
+          <Main
+            open={open}
+            openEditor={openEditor}
+            notes={notes}
+            addNote={addNote}
+            setCurrentNoteId={setCurrentNoteId}
+          />
 
-      {open && (
-        <Editor
-          closeEditor={closeEditor}
-          currentNote={findCurrentNote()}
-          setNotes={setNotes}
-        />
+          <Editor
+            open={open}
+            closeEditor={closeEditor}
+            currentNote={findCurrentNote()}
+            setNotes={setNotes}
+          />
+        </React.Fragment>
+      ) : (
+        <div>
+          <div>You have not created any note.</div>
+          <button onClick={addNote}>create one</button>
+        </div>
       )}
     </div>
   );
@@ -53,7 +60,7 @@ export function Application() {
       favourite: false,
     };
 
-    setNotes((prevNotes) => [...prevNotes, note]);
+    setNotes((prevNotes) => [note, ...prevNotes]);
     setCurrentNoteId(note.id);
     openEditor();
   }

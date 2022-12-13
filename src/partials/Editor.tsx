@@ -2,6 +2,7 @@ import React from "react";
 import type { Note } from "~/types";
 
 type EditorProps = {
+  open: boolean;
   currentNote: Note | undefined;
   closeEditor: () => void;
   setNotes: React.Dispatch<React.SetStateAction<Note[]>>;
@@ -10,11 +11,15 @@ type EditorProps = {
 type EditorInput = HTMLInputElement | HTMLTextAreaElement;
 
 export function Editor(props: EditorProps) {
+  if (!props.open) {
+    return <></>;
+  }
+
   return (
     <div className="editor">
       <button onClick={props.closeEditor}>close</button>
 
-      <form className="editor--form">
+      <form className="editor--form" onSubmit={(e) => e.preventDefault()}>
         <input
           type="text"
           placeholder=""

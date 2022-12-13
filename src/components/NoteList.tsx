@@ -2,28 +2,33 @@ import React, { useContext } from "react";
 import type { Note } from "~/types";
 
 type NoteItemProps = {
-  note: Note;
+  notes: Note[];
   setCurrentNoteId: React.Dispatch<React.SetStateAction<string | number>>;
   openEditor: () => void;
 };
 
-export function NoteItem(props: NoteItemProps) {
+export function NoteList(props: NoteItemProps) {
   return (
-    <article className="note">
-      <h3 className="note--tile">
-        <a href="#" onClick={openInEditor}>
-          {props.note.title}
-        </a>
-      </h3>
-      <div className="note--description">Lorem, ipsum dolor.</div>
-      <div className="note--date">December 10</div>
-    </article>
+    <React.Fragment>
+      {props.notes.map((note) => {
+        return (
+          <article className="note" key={note.id}>
+            <h3 className="note--tile">
+              <a href="#" onClick={(event) => openInEditor(event, note.id)}>
+                {note.title}
+              </a>
+            </h3>
+            <div className="note--description">Lorem, ipsum dolor.</div>
+            <div className="note--date">December 10</div>
+          </article>
+        );
+      })}
+    </React.Fragment>
   );
 
-  function openInEditor(event: React.MouseEvent) {
+  function openInEditor(event: React.MouseEvent, id: string | number) {
     event.preventDefault();
-    props.setCurrentNoteId(props.note.id);
+    props.setCurrentNoteId(id);
     props.openEditor();
-    console.log("sure");
   }
 }
