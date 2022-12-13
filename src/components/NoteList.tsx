@@ -28,7 +28,7 @@ export function NoteList(props: NoteItemProps) {
 
   function openInEditor(event: React.MouseEvent, id: string | number) {
     event.preventDefault();
-    // props.setCurrentNoteId(id);
+    props.dispatch({ type: "setCurrentNoteId", payload: id });
     props.dispatch({ type: "openEditor", payload: true });
   }
 }

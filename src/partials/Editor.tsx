@@ -1,20 +1,20 @@
 import React from "react";
 
 import { initialState } from "~/reducer";
-
 import type { ActionType } from "~/reducer";
-import type { Note } from "~/types";
 
 type EditorProps = {
   state: typeof initialState;
   dispatch: React.Dispatch<ActionType>;
-  currentNote: Note | undefined;
-  setNotes: React.Dispatch<React.SetStateAction<Note[]>>;
 };
 
 type EditorInput = HTMLInputElement | HTMLTextAreaElement;
 
 export function Editor(props: EditorProps) {
+  const currentNote = props.state.notes.find(
+    (note) => note.id === props.state.currentNoteId
+  );
+
   if (!props.state.editorOpen) {
     return <></>;
   }
@@ -27,12 +27,12 @@ export function Editor(props: EditorProps) {
           placeholder=""
           name="title"
           onChange={handleChange}
-          value={props.currentNote?.title}
+          value={currentNote?.title}
         />
         <br />
         <textarea
           name="text"
-          value={props.currentNote?.text}
+          value={currentNote?.text}
           onChange={handleChange}
         />
       </form>
@@ -40,7 +40,7 @@ export function Editor(props: EditorProps) {
       <button
         onClick={() => props.dispatch({ type: "closeEditor", payload: false })}
       >
-        close
+        finish
       </button>
     </div>
   );
@@ -48,14 +48,10 @@ export function Editor(props: EditorProps) {
   function handleChange(event: React.ChangeEvent<EditorInput>) {
     const { name, value } = event.target;
 
-    props.setNotes((prevNotes) => {
-      const newNotes = prevNotes.map((note) => {
-        return note.id === props.currentNote?.id
-          ? { ...note, [name]: value }
-          : note;
-      });
-
-      return newNotes;
+    const newNotes = props.state.notes.map((note) => {
+      return note.id === currentNote?.id ? { ...note, [name]: value } : note;
     });
+
+    props.dispatch({ type: "setNotes", payload: newNotes });
   }
 }
