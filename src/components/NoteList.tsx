@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
+import { ActionType } from "~/reducer";
 import type { Note } from "~/types";
 
 type NoteItemProps = {
   notes: Note[];
-  setCurrentNoteId: React.Dispatch<React.SetStateAction<string | number>>;
-  openEditor: () => void;
+  dispatch: React.Dispatch<ActionType>;
 };
 
 export function NoteList(props: NoteItemProps) {
@@ -28,7 +28,7 @@ export function NoteList(props: NoteItemProps) {
 
   function openInEditor(event: React.MouseEvent, id: string | number) {
     event.preventDefault();
-    props.setCurrentNoteId(id);
-    props.openEditor();
+    // props.setCurrentNoteId(id);
+    props.dispatch({ type: "openEditor", payload: true });
   }
 }

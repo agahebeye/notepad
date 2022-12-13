@@ -17,48 +17,16 @@ export function Application() {
 
   return (
     <div className="app">
-      {notes.length > 0 ? (
-        <React.Fragment>
-          <Main
-            open={state.editorOpen}
-            openEditor={() => dispatch({ type: "openEditor", payload: true })}
-            notes={notes}
-            addNote={addNote}
-            setCurrentNoteId={setCurrentNoteId}
-          />
+      <Main state={state} dispatch={dispatch} />
 
-          <Editor
-            open={state.editorOpen}
-            closeEditor={() =>
-              dispatch({ type: "closeEditor", payload: false })
-            }
-            currentNote={findCurrentNote()}
-            setNotes={setNotes}
-          />
-        </React.Fragment>
-      ) : (
-        <div>
-          <div>You have not created any note.</div>
-          <button onClick={addNote}>create one</button>
-        </div>
-      )}
+      <Editor
+        open={state.editorOpen}
+        closeEditor={() => dispatch({ type: "closeEditor", payload: false })}
+        currentNote={findCurrentNote()}
+        setNotes={setNotes}
+      />
     </div>
   );
-
-  function addNote() {
-    const note: Note = {
-      title: "Enter your title",
-      id: nanoid(),
-      description: "",
-      createdAt: new Date().toDateString(),
-      text: "type your text here",
-      favourite: false,
-    };
-
-    setNotes((prevNotes) => [note, ...prevNotes]);
-    setCurrentNoteId(note.id);
-    dispatch({ type: "openEditor", payload: true });
-  }
 
   function findCurrentNote() {
     return notes.find((note) => note.id === currentNoteId);
