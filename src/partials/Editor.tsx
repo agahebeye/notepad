@@ -11,7 +11,7 @@ type EditorProps = {
   setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
 };
 
-type EditorInput = HTMLInputElement | HTMLTextAreaElement;
+type EditorInput = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 
 export function Editor(props: EditorProps) {
   const currentNote = props.state.notes.find(
@@ -19,8 +19,11 @@ export function Editor(props: EditorProps) {
   );
 
   const categoryElements = props.categories.map((category) => {
+    const attributes =
+      category.name === "No category" ? { disabled: true } : undefined;
+
     return (
-      <option value={category.id} key={category.id}>
+      <option value={category.name} key={category.id} {...attributes}>
         {category.name}
       </option>
     );
@@ -39,7 +42,13 @@ export function Editor(props: EditorProps) {
           value={currentNote?.title}
         />
 
-        <select name="category">{categoryElements}</select>
+        <select
+          name="category"
+          value={currentNote?.category}
+          onChange={handleChange}
+        >
+          {categoryElements}
+        </select>
 
         <textarea
           name="text"

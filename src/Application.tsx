@@ -4,11 +4,13 @@ import { Main } from "./partials/Main";
 import { Editor } from "./partials/Editor";
 
 import { initialState, reducer } from "./reducer";
-import type { Category } from "./types";
+import { categories as initialCategories } from "./data";
+import { Category } from "./types";
 
 export function Application() {
   const [state, dispatch] = React.useReducer(reducer, initialState);
-  const [categories, setCategories] = React.useState<Category[]>([]);
+  const [categories, setCategories] =
+    React.useState<Category[]>(initialCategories);
 
   console.log("application rendered");
 

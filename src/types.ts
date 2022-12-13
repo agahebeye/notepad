@@ -1,6 +1,6 @@
 export declare type Note = {
     id: string | number;
-    categoryId?: string | number
+    category?: string | number
     title: string;
     description: string;
     text: string;

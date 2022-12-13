@@ -18,8 +18,11 @@ export function NoteList(props: NoteItemProps) {
                 {note.title}
               </a>
             </h3>
-            <div className="note--description">Lorem, ipsum dolor.</div>
-            <div className="note--date">December 10</div>
+            <div>Lorem ipsum dolor sit amet consectetur.</div>
+            <div className="note--description">
+              <small>{note?.category ?? "no category"}</small>&bull;
+              <small className="note--date">December 10</small>
+            </div>
           </article>
         );
       })}

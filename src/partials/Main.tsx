@@ -68,6 +68,7 @@ export function Main(props: MainProps) {
       createdAt: new Date().toDateString(),
       text: "type your text here",
       favourite: false,
+      category: "No category",
     };
 
     props.dispatch({ type: "addNote", payload: note });

@@ -3,6 +3,9 @@ import { nanoid } from "nanoid"
 export const categories = [
     {
         id: nanoid(),
+        name: 'No category'
+    }, {
+        id: nanoid(),
         name: 'Travel'
     },
     {
