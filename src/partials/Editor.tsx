@@ -2,10 +2,13 @@ import React from "react";
 
 import { initialState } from "~/reducer";
 import type { ActionType } from "~/reducer";
+import { Category } from "~/types";
 
 type EditorProps = {
   state: typeof initialState;
   dispatch: React.Dispatch<ActionType>;
+  categories: Category[];
+  setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
 };
 
 type EditorInput = HTMLInputElement | HTMLTextAreaElement;
@@ -15,11 +18,19 @@ export function Editor(props: EditorProps) {
     (note) => note.id === props.state.currentNoteId
   );
 
+  const categoryElements = props.categories.map((category) => {
+    return (
+      <option value={category.id} key={category.id}>
+        {category.name}
+      </option>
+    );
+  });
+
   console.log("editor rendered");
 
   return (
     <div className="editor">
-      <form className="editor--form" onSubmit={(e) => e.preventDefault()}>
+      <form className="editorForm" onSubmit={(e) => e.preventDefault()}>
         <input
           type="text"
           placeholder=""
@@ -27,7 +38,9 @@ export function Editor(props: EditorProps) {
           onChange={handleChange}
           value={currentNote?.title}
         />
-        <br />
+
+        <select name="category">{categoryElements}</select>
+
         <textarea
           name="text"
           value={currentNote?.text}

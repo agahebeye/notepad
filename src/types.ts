@@ -1,5 +1,6 @@
 export declare type Note = {
     id: string | number;
+    categoryId?: string | number
     title: string;
     description: string;
     text: string;
@@ -7,4 +8,7 @@ export declare type Note = {
     createdAt: string;
 }
 
-export declare type SetOpen = (state: React.SetStateAction<boolean>) => void;
+export declare type Category = {
+    id: string | number;
+    name: string;
+}

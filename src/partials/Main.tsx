@@ -5,7 +5,7 @@ import { NoteList } from "~/components/NoteList";
 import { initialState } from "~/reducer";
 
 import type { ActionType } from "~/reducer";
-import type { Note } from "~/types";
+import type { Category, Note } from "~/types";
 
 type MainProps = {
   state: typeof initialState;
@@ -15,7 +15,7 @@ type MainProps = {
 export function Main(props: MainProps) {
   const [keyword, setKeyword] = React.useState("");
 
-  const filteredNotes = React.useMemo(() => {
+  const searchedNotes = React.useMemo(() => {
     const regex = new RegExp(`${keyword}`, "ig");
 
     return keyword.length > 0
@@ -25,7 +25,7 @@ export function Main(props: MainProps) {
       : null;
   }, [keyword]);
 
-  const noteCount = filteredNotes?.length ?? props.state.notes.length;
+  const noteCount = searchedNotes?.length ?? props.state.notes.length;
 
   console.log("main rendered");
 
@@ -47,7 +47,7 @@ export function Main(props: MainProps) {
           </header>
 
           <NoteList
-            notes={filteredNotes ?? props.state.notes}
+            notes={searchedNotes ?? props.state.notes}
             dispatch={props.dispatch}
           />
         </div>
