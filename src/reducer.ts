@@ -5,6 +5,7 @@ export type ActionType =
     | { type: 'closeEditor'; payload: boolean }
     | { type: 'addNote'; payload: Note }
     | { type: 'setNotes'; payload: Note[] }
+    | { type: 'searchNotes'; payload: string }
     | { type: 'setCurrentNoteId'; payload: string | number }
 
 export const initialState = {
@@ -33,6 +34,20 @@ export function reducer(state: typeof initialState, action: ActionType) {
             return {
                 ...state,
                 notes: action.payload
+            }
+
+        case "searchNotes":
+            const regex = new RegExp(`^${action.payload}`, 'gi')
+
+            const notes = state.notes.filter(note => {
+                return regex.test(note.title)
+            })
+
+            // console.log(notes)
+
+            return {
+                ...state,
+                notes
             }
 
         case "setCurrentNoteId":

@@ -13,9 +13,21 @@ type MainProps = {
 };
 
 export function Main(props: MainProps) {
-  if (props.state.editorOpen) {
-    return <></>;
-  }
+  const [keyword, setKeyword] = React.useState("");
+
+  const filteredNotes = React.useMemo(() => {
+    const regex = new RegExp(`${keyword}`, "ig");
+
+    return keyword.length > 0
+      ? props.state.notes.filter((note) => {
+          return note.title.match(regex);
+        })
+      : null;
+  }, [keyword]);
+
+  const noteCount = filteredNotes?.length ?? props.state.notes.length;
+
+  console.log("main rendered");
 
   return (
     <main>
@@ -23,16 +35,21 @@ export function Main(props: MainProps) {
         <div>
           <header>
             <h1 className="category-title">All notes</h1>
-            <div className="note-count">{props.state.notes.length} note(s)</div>
+            <div className="note-count">{noteCount} note(s)</div>
             <input
               className="input-search"
               placeholder="Search notes..."
               type="text"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
             />
             <button onClick={addNote}>create note</button>
           </header>
 
-          <NoteList notes={props.state.notes} dispatch={props.dispatch} />
+          <NoteList
+            notes={filteredNotes ?? props.state.notes}
+            dispatch={props.dispatch}
+          />
         </div>
       ) : (
         <div>

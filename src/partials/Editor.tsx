@@ -15,9 +15,7 @@ export function Editor(props: EditorProps) {
     (note) => note.id === props.state.currentNoteId
   );
 
-  if (!props.state.editorOpen) {
-    return <></>;
-  }
+  console.log("editor rendered");
 
   return (
     <div className="editor">

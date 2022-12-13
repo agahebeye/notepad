@@ -8,10 +8,11 @@ import { initialState, reducer } from "./reducer";
 export function Application() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  console.log("application rendered");
   return (
     <div className="app">
-      <Main state={state} dispatch={dispatch} />
-      <Editor state={state} dispatch={dispatch} />
+      {!state.editorOpen && <Main state={state} dispatch={dispatch} />}
+      {state.editorOpen && <Editor state={state} dispatch={dispatch} />}
     </div>
   );
 }
