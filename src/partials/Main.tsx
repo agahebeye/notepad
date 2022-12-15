@@ -10,6 +10,7 @@ import type { Category, Note } from "~/types";
 type MainProps = {
   state: typeof initialState;
   dispatch: React.Dispatch<ActionType>;
+  addNote: () => void;
 };
 
 export function Main(props: MainProps) {
@@ -31,47 +32,25 @@ export function Main(props: MainProps) {
 
   return (
     <main>
-      {props.state.notes.length > 0 ? (
-        <div>
-          <header>
-            <h1 className="category-title">All notes</h1>
-            <div className="note-count">{noteCount} note(s)</div>
-            <input
-              className="input-search"
-              placeholder="Search notes..."
-              type="text"
-              value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
-            />
-            <button onClick={addNote}>create note</button>
-          </header>
-
-          <NoteList
-            notes={searchedNotes ?? props.state.notes}
-            dispatch={props.dispatch}
+      <div>
+        <header>
+          <h1 className="category-title">All notes</h1>
+          <div className="note-count">{noteCount} note(s)</div>
+          <input
+            className="input-search"
+            placeholder="Search notes..."
+            type="text"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
           />
-        </div>
-      ) : (
-        <div>
-          <div>You have not created any note.</div>
-          <button onClick={addNote}>create one</button>
-        </div>
-      )}
+          <button onClick={props.addNote}>create note</button>
+        </header>
+
+        <NoteList
+          notes={searchedNotes ?? props.state.notes}
+          dispatch={props.dispatch}
+        />
+      </div>
     </main>
   );
-
-  function addNote() {
-    const note: Note = {
-      title: "Enter your title",
-      id: nanoid(),
-      description: "",
-      createdAt: new Date().toDateString(),
-      text: "type your text here",
-      favourite: false,
-      category: "No category",
-    };
-
-    props.dispatch({ type: "addNote", payload: note });
-    props.dispatch({ type: "openEditor", payload: true });
-  }
 }
