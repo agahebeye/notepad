@@ -5,12 +5,10 @@ import { NoteList } from "~/components/NoteList";
 import { initialState } from "~/reducer";
 
 import type { ActionType } from "~/reducer";
-import type { Category, Note } from "~/types";
 
 type MainProps = {
   state: typeof initialState;
   dispatch: React.Dispatch<ActionType>;
-  addNote: () => void;
 };
 
 export function Main(props: MainProps) {
@@ -30,20 +28,30 @@ export function Main(props: MainProps) {
 
   console.log("main rendered");
 
-  return (
+  return props.state.notes.length > 0 ? (
     <main>
-      <div>
-        <header>
-          <h1 className="category-title">All notes</h1>
-          <div className="note-count">{noteCount} note(s)</div>
+      <div className="max-w-[600px] w-full px-8">
+        <header className="space-y-3 mb-6">
+          <div className="note-count">
+            <span className="font-bold">{noteCount} </span>
+            note(s)
+          </div>
+
           <input
-            className="input-search"
+            className="input"
             placeholder="Search notes..."
             type="text"
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
           />
-          <button onClick={props.addNote}>create note</button>
+          <button
+            className="px-6 py-3 text-xs font-medium uppercase tracking-wide rounded bg-blue-400 text-white"
+            onClick={() =>
+              props.dispatch({ type: "openEditor", payload: true })
+            }
+          >
+            create note
+          </button>
         </header>
 
         <NoteList
@@ -52,5 +60,16 @@ export function Main(props: MainProps) {
         />
       </div>
     </main>
+  ) : (
+    <div className="text-center space-y-4">
+      <div>You have not created any note.</div>
+      <button
+        onClick={() => props.dispatch({ type: "openEditor", payload: true })}
+        type="button"
+        className="button"
+      >
+        Create one
+      </button>
+    </div>
   );
 }

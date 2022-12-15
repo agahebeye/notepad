@@ -5,14 +5,14 @@ import { Category, Note } from "~/types";
 type CategoryListProps = {
   items: Category[];
   value: string;
-  onChange: (category: string | number) => void;
+  onChange: (category: string) => void;
 };
 
 export function CategoryList(props: CategoryListProps) {
   return (
-    <Listbox defaultValue={props.value} onChange={props.onChange}>
+    <Listbox onChange={props.onChange}>
       <div className="relative mt-1 text-sm w-36">
-        <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+        <Listbox.Button className="relative w-full text-gray-700 cursor-default rounded-lg bg-gray-100 py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
           <span className="block truncate">{props.value}</span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
             <ChevronUpDownIcon
@@ -25,11 +25,11 @@ export function CategoryList(props: CategoryListProps) {
           {props.items.map((category) => (
             <Listbox.Option
               key={category.id}
-              className="relative text-sm cursor-default select-none py-2 pl-10 pr-4 ui-active:bg-blue-100 ui-active:text-blue-600 ui-not-active:text-gray-900"
+              className="relative text-sm cursor-default select-none py-2 pl-10 pr-4 ui-active:bg-blue-100 ui-active:text-blue-600 ui-not-active:text-gray-900 ui-disabled:text-gray-400"
               value={category.name}
+              disabled={category.name === "No category"}
             >
-              <span
-                className="block truncate ui-selected:font-medium font-normal">
+              <span className="block truncate ui-selected:font-medium font-normal">
                 {category.name}
               </span>
               <span className="hidden absolute inset-y-0 left-0 ui-selected:flex items-center pl-3 text-blue-400">

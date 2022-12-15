@@ -1,4 +1,5 @@
-import type { Note } from "./types"
+import type { Category, Note } from "./types"
+import { categories } from "./data";
 
 export type ActionType =
     | { type: 'openEditor'; payload: boolean }
@@ -6,11 +7,14 @@ export type ActionType =
     | { type: 'addNote'; payload: Note }
     | { type: 'setNotes'; payload: Note[] }
     | { type: 'setCurrentNoteId'; payload: string | number }
+    | { type: 'addCategory'; payload: Category }
+
 
 export const initialState = {
     editorOpen: false,
     currentNoteId: 0 as string | number,
-    notes: [] as Note[]
+    notes: [] as Note[],
+    categories: categories as Category[]
 }
 
 export function reducer(state: typeof initialState, action: ActionType) {
@@ -41,7 +45,14 @@ export function reducer(state: typeof initialState, action: ActionType) {
                 currentNoteId: action.payload
             }
 
+        case "addCategory":
+            return {
+                ...state,
+                categories: [...state.categories, action.payload]
+            }
+
         default:
-            throw new Error('unknown action');
+            console.error(`Unhandled action type`);
+            return state;
     }
 }

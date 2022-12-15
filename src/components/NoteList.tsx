@@ -9,24 +9,30 @@ type NoteItemProps = {
 
 export function NoteList(props: NoteItemProps) {
   return (
-    <React.Fragment>
+    <div className="space-y-4 h-[300px] overflow-y-auto p-4">
       {props.notes.map((note) => {
         return (
-          <article className="note" key={note.id}>
-            <h3 className="note--tile">
+          <article
+            className="bg-white p-4 text-gray-800 shadow-md rounded-lg border"
+            key={note.id}
+          >
+            <h3 className="text-xl font-semibold">
               <a href="#" onClick={(event) => openInEditor(event, note.id)}>
                 {note.title}
               </a>
             </h3>
-            <div>Lorem ipsum dolor sit amet consectetur.</div>
-            <div className="note--description">
-              <small>{note?.category ?? "no category"}</small>&bull;
-              <small className="note--date">December 10</small>
+
+            <div className="text-sm mt-1 mb-1">
+            </div>
+
+            <div className="text-xs flex justify-between">
+              <span className="note--date">December 10</span>
+              <span>{note.category}</span>
             </div>
           </article>
         );
       })}
-    </React.Fragment>
+    </div>
   );
 
   function openInEditor(event: React.MouseEvent, id: string | number) {
