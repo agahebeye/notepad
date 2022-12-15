@@ -46,9 +46,10 @@ export function Main(props: MainProps) {
           />
           <button
             className="px-6 py-3 text-xs font-medium uppercase tracking-wide rounded bg-blue-400 text-white"
-            onClick={() =>
-              props.dispatch({ type: "openEditor", payload: true })
-            }
+            onClick={() => {
+              props.dispatch({ type: "openEditor", payload: true });
+              props.dispatch({ type: "setCurrentNoteId", payload: undefined });
+            }}
           >
             create note
           </button>

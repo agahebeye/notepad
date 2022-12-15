@@ -26,7 +26,7 @@ export function NewCategoryDialog(props: NewCategoryDialogProps) {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-25" />
+          <div className="fixed inset-0 bg-white/50 backdrop-blur" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -40,7 +40,7 @@ export function NewCategoryDialog(props: NewCategoryDialogProps) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl border border-gray-300 transition-all">
                 <Dialog.Title
                   as="h3"
                   className="text-lg font-medium leading-6 text-gray-900"
@@ -50,16 +50,17 @@ export function NewCategoryDialog(props: NewCategoryDialogProps) {
                 <form className="mt-4">
                   <input
                     type="text"
-                    className="input"
+                    className="input border border-gray-300 focus:border-gray-300 text-sm py-3"
                     value={categoryName}
                     onChange={(e) => setCategoryName(e.target.value)}
-                    placeholder="category"
+                    placeholder="Name"
                   />
                   <button
-                    className="button mt-4 table m-auto"
+                    className="button mt-4 table m-auto space-x-2"
                     onClick={() => props.close(categoryName)}
                   >
-                    add <PlusIcon className="w-5 h-5 inline" />
+                    <span>add</span>
+                    <PlusIcon className="w-4 h-4 inline" />
                   </button>
                 </form>
               </Dialog.Panel>

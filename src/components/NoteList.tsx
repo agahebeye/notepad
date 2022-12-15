@@ -16,19 +16,15 @@ export function NoteList(props: NoteItemProps) {
             className="bg-white p-4 text-gray-800 shadow-md rounded-lg border"
             key={note.id}
           >
-            <h3 className="text-xl font-semibold">
-              <a href="#" onClick={(event) => openInEditor(event, note.id)}>
+            <h3 className="text-xl">
+              <a href="" onClick={(event) => openInEditor(event, note.id)}>
                 {note.title}
               </a>
             </h3>
 
-            <div className="text-sm mt-1 mb-1">
-            </div>
+            <div className="text-sm mt-1 mb-1"></div>
 
-            <div className="text-xs flex justify-between">
-              <span className="note--date">December 10</span>
-              <span>{note.category}</span>
-            </div>
+            <div className="text-xs flex justify-between">December 10</div>
           </article>
         );
       })}

@@ -6,13 +6,13 @@ export type ActionType =
     | { type: 'closeEditor'; payload: boolean }
     | { type: 'addNote'; payload: Note }
     | { type: 'setNotes'; payload: Note[] }
-    | { type: 'setCurrentNoteId'; payload: string | number }
+    | { type: 'setCurrentNoteId'; payload: string | number | undefined}
     | { type: 'addCategory'; payload: Category }
 
 
 export const initialState = {
     editorOpen: false,
-    currentNoteId: 0 as string | number,
+    currentNoteId: 0/*  as string | number | undefined */,
     notes: [] as Note[],
     categories: categories as Category[]
 }
@@ -29,7 +29,6 @@ export function reducer(state: typeof initialState, action: ActionType) {
         case "addNote":
             return {
                 ...state,
-                currentNoteId: action.payload.id,
                 notes: [action.payload, ...state.notes]
             }
 

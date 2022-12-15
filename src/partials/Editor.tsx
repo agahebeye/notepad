@@ -51,7 +51,7 @@ export function Editor(props: EditorProps) {
           type="text"
           className="input text-sm py-3"
           onChange={handleChange}
-          value={note.title}
+          value={currentNote?.title ?? note.title}
           name="title"
           placeholder="Title"
         />
@@ -74,19 +74,21 @@ export function Editor(props: EditorProps) {
 
         <textarea
           name="text"
-          value={note.text}
+          value={currentNote?.text ?? note.text}
           onChange={handleChange}
           ref={textRef}
           className="mt-6 resize-none bg-gray-100 min-h-[200px] w-full focus:ring-0 border-0 shadow-md rounded-lg"
         />
 
-        <button
-          onClick={addNote}
-          className="button space-x-1 mt-4 table m-auto"
-        >
-          <span>Finish</span>
-          <CheckIcon className="w-4 h-4 inline" />
-        </button>
+        {note.title.length > 5 && (
+          <button
+            onClick={addNote}
+            className="button space-x-1 mt-4 table m-auto"
+          >
+            <span>Finish</span>
+            <CheckIcon className="w-4 h-4 inline" />
+          </button>
+        )}
       </form>
     </div>
   );
@@ -115,20 +117,15 @@ export function Editor(props: EditorProps) {
   }
 
   function addNote() {
-    if (note.title.trim().length > 0) {
-      const newNote = {
-        ...note,
-        id: nanoid(),
-        createdAt: new Date().toDateString(),
-        favourite: false,
-      };
+    const newNote = {
+      ...note,
+      id: nanoid(),
+      createdAt: new Date().toDateString(),
+      favourite: false,
+    };
 
-      console.log(newNote);
-      props.dispatch({ type: "addNote", payload: newNote });
-      props.dispatch({ type: "openEditor", payload: false });
-    } else {
-      throw new Error("Title is required.");
-    }
+    props.dispatch({ type: "addNote", payload: newNote });
+    props.dispatch({ type: "openEditor", payload: false });
   }
 
   function addNewCategory(name: string) {
