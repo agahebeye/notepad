@@ -22,6 +22,7 @@ export function Editor(props: EditorProps) {
     description: "",
     text: "",
     category: "No category",
+    favourite: false,
   });
 
   const currentNote = props.state.notes.find(
@@ -34,6 +35,7 @@ export function Editor(props: EditorProps) {
     textRef.current?.focus();
   }, []);
 
+  console.log(props.state.notes);
   console.log("editor rendered");
 
   return (
@@ -55,6 +57,7 @@ export function Editor(props: EditorProps) {
           name="title"
           placeholder="Title"
         />
+
         <div className="mt-2 space-x-4 flex items-center">
           <CategoryList
             items={props.state.categories}
@@ -70,6 +73,17 @@ export function Editor(props: EditorProps) {
           </button>
 
           <NewCategoryDialog isOpen={isDialogOpen} close={addNewCategory} />
+        </div>
+
+        <div className="mt-3 flex items-center space-x-2 text-sm text-gray-700">
+          <input
+            id="favourite"
+            type="checkbox"
+            name="favourite"
+            onChange={handleChange}
+            checked={currentNote?.favourite ?? note.favourite}
+          />
+          <label htmlFor="favourite">Favourite?</label>
         </div>
 
         <textarea
@@ -95,14 +109,17 @@ export function Editor(props: EditorProps) {
 
   function handleChange(event: React.ChangeEvent<EditorInput> | string) {
     let name = "",
-      value = "";
+      value = "" as string | boolean;
 
     if (typeof event === "string") {
       name = "category";
       value = event;
     } else {
-      name = event?.target?.name;
-      value = event?.target?.value;
+      name = event.currentTarget.name;
+      value =
+        event.target.type === "checkbox"
+          ? (event.target as HTMLInputElement).checked
+          : event.target.value;
     }
 
     if (currentNote) {
@@ -121,7 +138,6 @@ export function Editor(props: EditorProps) {
       ...note,
       id: nanoid(),
       createdAt: new Date().toDateString(),
-      favourite: false,
     };
 
     props.dispatch({ type: "addNote", payload: newNote });

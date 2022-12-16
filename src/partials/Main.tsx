@@ -45,7 +45,7 @@ export function Main(props: MainProps) {
             onChange={(e) => setKeyword(e.target.value)}
           />
           <button
-            className="px-6 py-3 text-xs font-medium uppercase tracking-wide rounded bg-blue-400 text-white"
+            className="button"
             onClick={() => {
               props.dispatch({ type: "openEditor", payload: true });
               props.dispatch({ type: "setCurrentNoteId", payload: undefined });
