@@ -8,6 +8,6 @@
   }
 
   .input {
-    @apply w-full bg-gray-100 focus:ring-0 border-0 shadow-md text-gray-700 rounded-lg;
+    @apply w-full  focus:ring-0 border-blue-400  text-gray-700 rounded-lg;
   }
 }

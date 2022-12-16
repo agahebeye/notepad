@@ -9,6 +9,7 @@ import { initialState, reducer } from "./reducer";
 export function Application() {
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
+  console.log(state.notes)
   console.log("application rendered");
 
   return (
@@ -17,19 +18,4 @@ export function Application() {
       {state.editorOpen && <Editor state={state} dispatch={dispatch} />}
     </div>
   );
-
-  function addNote() {
-    const note = {
-      title: "",
-      id: nanoid(),
-      description: "",
-      createdAt: new Date().toDateString(),
-      text: "",
-      favourite: false,
-      category: "No category",
-    };
-
-    dispatch({ type: "addNote", payload: note });
-    dispatch({ type: "openEditor", payload: true });
-  }
 }

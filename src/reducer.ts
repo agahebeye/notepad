@@ -6,13 +6,14 @@ export type ActionType =
     | { type: 'closeEditor'; payload: boolean }
     | { type: 'addNote'; payload: Note }
     | { type: 'setNotes'; payload: Note[] }
-    | { type: 'setCurrentNoteId'; payload: string | number | undefined}
+    | { type: 'deleteNote'; payload: string }
+    | { type: 'setCurrentNoteId'; payload: string | number | undefined }
     | { type: 'addCategory'; payload: Category }
 
 
 export const initialState = {
     editorOpen: false,
-    currentNoteId: 0/*  as string | number | undefined */,
+    currentNoteId: 0 as string | number | undefined,
     notes: [] as Note[],
     categories: categories as Category[]
 }
@@ -38,6 +39,12 @@ export function reducer(state: typeof initialState, action: ActionType) {
                 notes: action.payload
             }
 
+        case "deleteNote":
+            return {
+                ...state,
+                notes: state.notes.filter(note => note.id !== action.payload)
+            }
+
         case "setCurrentNoteId":
             return {
                 ...state,
@@ -51,7 +58,6 @@ export function reducer(state: typeof initialState, action: ActionType) {
             }
 
         default:
-            console.error(`Unhandled action type`);
-            return state;
+            throw new Error('Unkown action type')
     }
 }

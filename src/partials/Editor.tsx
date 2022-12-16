@@ -35,14 +35,20 @@ export function Editor(props: EditorProps) {
     textRef.current?.focus();
   }, []);
 
-  console.log(props.state.notes);
   console.log("editor rendered");
 
   return (
     <div className="max-w-[600px] w-full px-8">
+      {currentNote && (
+        <div className="text-sm text-blue-500">
+          Note: Updates are being carried out live and synchroniously. When you
+          have finished hit <span className="bg-gray-200 p-0.5 font-bold">back button</span> and the current note will reflect the
+          change done so far.
+        </div>
+      )}
       <button
         onClick={() => props.dispatch({ type: "closeEditor", payload: false })}
-        className="flex space-x-2 items-center text-sm text-gray-700"
+        className="flex mt-8 space-x-2 items-center text-sm text-gray-700"
       >
         <ArrowLeftIcon className="w-4 h-4" />
         <span>back</span>
@@ -81,6 +87,7 @@ export function Editor(props: EditorProps) {
             type="checkbox"
             name="favourite"
             onChange={handleChange}
+            className="focus:ring-0 hover:bg-blue-400  checked:bg-blue-400 border-blue-400 rounded-full"
             checked={currentNote?.favourite ?? note.favourite}
           />
           <label htmlFor="favourite">Favourite?</label>
@@ -91,7 +98,7 @@ export function Editor(props: EditorProps) {
           value={currentNote?.text ?? note.text}
           onChange={handleChange}
           ref={textRef}
-          className="mt-6 resize-none bg-gray-100 min-h-[200px] w-full focus:ring-0 border-0 shadow-md rounded-lg"
+          className="input mt-6 resize-none min-h-[200px] text-sm p-4"
         />
 
         {note.title.length > 5 && (
