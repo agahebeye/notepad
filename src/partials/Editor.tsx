@@ -1,11 +1,13 @@
 import React from "react";
 import { ArrowLeftIcon, CheckIcon, PlusIcon } from "@heroicons/react/24/solid";
+import { nanoid } from "nanoid";
 
 import { CategoryList } from "~/components/CategoryList";
 import { NewCategoryDialog } from "~/components/NewCategoryDialog";
 import { initialState } from "~/reducer";
+
 import type { ActionType } from "~/reducer";
-import { nanoid } from "nanoid";
+import type { Note } from "~/types";
 
 type EditorProps = {
   state: typeof initialState;
@@ -26,7 +28,7 @@ export function Editor(props: EditorProps) {
   });
 
   const currentNote = props.state.notes.find(
-    (note) => note.id === props.state.currentNoteId
+    (note: Note) => note.id === props.state.currentNoteId
   );
 
   const textRef = React.useRef<HTMLTextAreaElement | null>(null);
@@ -41,9 +43,10 @@ export function Editor(props: EditorProps) {
     <div className="max-w-[600px] w-full px-8">
       {currentNote && (
         <div className="text-sm text-blue-500">
-          Note: Updates are being carried out live and synchroniously. When you
-          have finished hit <span className="bg-gray-200 p-0.5 font-bold">back button</span> and the current note will reflect the
-          change done so far.
+          Note that updates are being carried out live and synchroniously. When
+          you have finished hit{" "}
+          <span className="bg-gray-200 p-0.5 font-bold">back button</span> and
+          the current note will reflect the change made so far.
         </div>
       )}
       <button
@@ -78,7 +81,10 @@ export function Editor(props: EditorProps) {
             add new category
           </button>
 
-          <NewCategoryDialog isOpen={isDialogOpen} close={addNewCategory} />
+          <NewCategoryDialog
+            isOpen={isDialogOpen}
+            addCategory={addNewCategory}
+          />
         </div>
 
         <div className="mt-3 flex items-center space-x-2 text-sm text-gray-700">
@@ -130,7 +136,7 @@ export function Editor(props: EditorProps) {
     }
 
     if (currentNote) {
-      const newNotes = props.state.notes.map((note) => {
+      const newNotes = props.state.notes.map((note: Note) => {
         return note.id === currentNote?.id ? { ...note, [name]: value } : note;
       });
 
@@ -152,7 +158,7 @@ export function Editor(props: EditorProps) {
   }
 
   function addNewCategory(name: string) {
-    if (name.length > 0) {
+    if (name.length > 3) {
       props.dispatch({
         type: "addCategory",
         payload: {

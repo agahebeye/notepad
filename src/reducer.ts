@@ -11,7 +11,7 @@ export type ActionType =
     | { type: 'addCategory'; payload: Category }
 
 
-export const initialState = {
+export const initialState = JSON.parse(localStorage.getItem('app-store')!) ?? {
     editorOpen: false,
     currentNoteId: 0 as string | number | undefined,
     notes: [] as Note[],
@@ -42,7 +42,7 @@ export function reducer(state: typeof initialState, action: ActionType) {
         case "deleteNote":
             return {
                 ...state,
-                notes: state.notes.filter(note => note.id !== action.payload)
+                notes: state.notes.filter((note: Note) => note.id !== action.payload)
             }
 
         case "setCurrentNoteId":

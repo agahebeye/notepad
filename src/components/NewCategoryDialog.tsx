@@ -1,10 +1,10 @@
 import React from "react";
 import { Transition, Dialog } from "@headlessui/react";
-import { PlusIcon } from "@heroicons/react/24/solid";
+import { PlusIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
 type NewCategoryDialogProps = {
   isOpen: boolean;
-  close: (name: string) => void;
+  addCategory: (name: string) => void;
 };
 
 export function NewCategoryDialog(props: NewCategoryDialogProps) {
@@ -15,7 +15,7 @@ export function NewCategoryDialog(props: NewCategoryDialogProps) {
       <Dialog
         as="div"
         className="relative z-10"
-        onClose={() => props.close(categoryName)}
+        onClose={() => props.addCategory(categoryName)}
       >
         <Transition.Child
           as={React.Fragment}
@@ -40,13 +40,19 @@ export function NewCategoryDialog(props: NewCategoryDialogProps) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl border border-gray-300 transition-all">
+              <Dialog.Panel className="w-full relative max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl border border-gray-300 transition-all">
+                <XMarkIcon
+                  onClick={() => props.addCategory(categoryName)}
+                  className="cursor-pointer w-5 h-5 absolute inline right-2 top-2 text-blue-400"
+                />
+
                 <Dialog.Title
                   as="h3"
                   className="text-lg font-medium leading-6 text-gray-900"
                 >
                   Add new category
                 </Dialog.Title>
+
                 <form className="mt-4">
                   <input
                     type="text"
@@ -55,13 +61,18 @@ export function NewCategoryDialog(props: NewCategoryDialogProps) {
                     onChange={(e) => setCategoryName(e.target.value)}
                     placeholder="Name"
                   />
-                  <button
-                    className="button mt-4 table m-auto space-x-2"
-                    onClick={() => props.close(categoryName)}
-                  >
-                    <span>add</span>
-                    <PlusIcon className="w-4 h-4 inline" />
-                  </button>
+                  {categoryName.length > 3 && (
+                    <button
+                      className="button mt-4 table m-auto space-x-2"
+                      onClick={() => {
+                        props.addCategory(categoryName);
+                        setCategoryName("");
+                      }}
+                    >
+                      <span>add</span>
+                      <PlusIcon className="w-4 h-4 inline" />
+                    </button>
+                  )}
                 </form>
               </Dialog.Panel>
             </Transition.Child>

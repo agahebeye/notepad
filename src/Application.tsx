@@ -9,7 +9,10 @@ import { initialState, reducer } from "./reducer";
 export function Application() {
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
-  console.log(state.notes)
+  React.useEffect(() => {
+    localStorage.setItem('app-store', JSON.stringify(state))
+  }, [state, dispatch])
+
   console.log("application rendered");
 
   return (
