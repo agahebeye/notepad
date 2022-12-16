@@ -3,6 +3,7 @@ import React from "react";
 import { NoteList } from "~/components/NoteList";
 import { FilterListBox } from "~/components/FilterListBox";
 import { initialState } from "~/reducer";
+import { initialFilters } from "~/data";
 
 import type { ActionType } from "~/reducer";
 import { Category, Note } from "~/types";
@@ -14,49 +15,47 @@ type MainProps = {
 
 export function Main(props: MainProps) {
   const filters = [
-    {
-      key: "all Notes",
-      value: "All Notes",
-    },
-    {
-      key: "favourite",
-      value: "Favourite",
-    },
-    {
-      key: "deleted",
-      value: "Deleted",
-    },
-    {
-      key: "category",
-      value: "Categories",
-    },
-  ].concat(
-    props.state.categories.map((category: Category) => ({
+    ...initialFilters,
+    ...props.state.categories.map((category: Category) => ({
       key: "category",
       value: category.name,
-    }))
-  );
+    })),
+  ];
 
   const [keyword, setKeyword] = React.useState("");
   const [filtered, setFiltered] = React.useState(filters[0]);
 
-  const searchedNotes = React.useMemo(() => {
-    let results = [] as Note[];
+  const filteredNotes = React.useMemo(() => {
+    let results = null;
 
     if (keyword.length > 0) {
       const regex = new RegExp(`${keyword}`, "ig");
 
-      console.log(filtered);
+      results = [
+        ...props.state.notes.filter((note: Note) => {
+          return note.title.match(regex);
+        }),
+      ];
+    }
 
-      return props.state.notes.filter((note: Note) => {
-        return note.title.match(regex);
-      });
+    switch (filtered.key) {
+      case "category":
+        console.log("all Notes");
+        break;
+      case "favourite":
+        console.log("favourite");
+        break;
+      case "deleted":
+        console.log("deleted");
+        break;
+      default:
+        console.log('all Notes')
     }
 
     return results;
   }, [keyword, filtered]);
 
-  const noteCount = searchedNotes?.length ?? props.state.notes.length;
+  const noteCount = filteredNotes?.length ?? props.state.notes.length;
 
   console.log("main rendered");
 
@@ -93,7 +92,7 @@ export function Main(props: MainProps) {
       </header>
 
       <NoteList
-        notes={searchedNotes ?? props.state.notes}
+        notes={filteredNotes ?? props.state.notes}
         dispatch={props.dispatch}
       />
     </div>
