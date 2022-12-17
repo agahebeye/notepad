@@ -25,38 +25,21 @@ export function Main(props: MainProps) {
   const [keyword, setKeyword] = React.useState("");
   const [filtered, setFiltered] = React.useState(filters[0]);
 
-  const filteredNotes = React.useMemo(() => {
-    let results = null;
+  const defaultNotes = props.state.notes.filter((note) => !note.deletedAt);
+  const filteredNotes = getFilteredNotes();
+  const notes =
+    filtered.value === "All Notes" && keyword.length < 1
+      ? defaultNotes
+      : filteredNotes;
 
-    if (keyword.length > 0) {
-      const regex = new RegExp(`${keyword}`, "ig");
+  const resultsText =
+    keyword.length > 0
+      ? "found"
+      : filtered.value !== "All Notes"
+      ? `in ${filtered.value} category`
+      : "";
 
-      results = [
-        ...props.state.notes.filter((note: Note) => {
-          return note.title.match(regex);
-        }),
-      ];
-    }
-
-    switch (filtered.key) {
-      case "category":
-        console.log("all Notes");
-        break;
-      case "favourite":
-        console.log("favourite");
-        break;
-      case "deleted":
-        console.log("deleted");
-        break;
-      default:
-        console.log('all Notes')
-    }
-
-    return results;
-  }, [keyword, filtered]);
-
-  const noteCount = filteredNotes?.length ?? props.state.notes.length;
-
+      console.log(notes)
   console.log("main rendered");
 
   return props.state.notes.length > 0 ? (
@@ -69,8 +52,8 @@ export function Main(props: MainProps) {
 
       <header className="space-y-3 my-6">
         <div className="note-count">
-          <span className="font-bold">{noteCount} </span>
-          note(s)
+          <span className="font-bold">{notes.length} </span>
+          note(s) <span>{resultsText}</span>
         </div>
 
         <input
@@ -92,7 +75,8 @@ export function Main(props: MainProps) {
       </header>
 
       <NoteList
-        notes={filteredNotes ?? props.state.notes}
+        notes={notes}
+        searchKeyword={keyword}
         dispatch={props.dispatch}
       />
     </div>
@@ -108,4 +92,48 @@ export function Main(props: MainProps) {
       </button>
     </div>
   );
+
+  function getFilteredNotes() {
+    return React.useMemo(() => {
+      let results = [] as Note[];
+
+      if (keyword.length > 0) {
+        const regex = new RegExp(`${keyword}`, "ig");
+
+        results = [
+          ...results,
+          ...props.state.notes.filter((note) => {
+            return note.title.match(regex);
+          }),
+        ];
+
+        console.log(results);
+      }
+
+      switch (filtered.key) {
+        case "category":
+          results = [
+            ...results,
+            ...props.state.notes.filter(
+              (note) => note.category === filtered.value
+            ),
+          ];
+          break;
+        case "favourite":
+          results = [
+            ...results,
+            ...props.state.notes.filter((note) => note.favourite),
+          ];
+          break;
+        case "deleted":
+          results = [
+            ...results,
+            ...props.state.notes.filter((note) => note.deletedAt),
+          ];
+          break;
+      }
+
+      return results;
+    }, [keyword, filtered]);
+  }
 }

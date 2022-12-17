@@ -1,15 +1,19 @@
-import { StarIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import React from "react";
+import { StarIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import Highlighter from "react-highlight-words";
+
 import { ActionType } from "~/reducer";
 import type { Note } from "~/types";
 
 type NoteItemProps = {
   notes: Note[];
+  searchKeyword: string;
   dispatch: React.Dispatch<ActionType>;
 };
 
 export function NoteList(props: NoteItemProps) {
   const [canDelete, setCanDelete] = React.useState(false);
+  const searchWords = [...new Set(props.searchKeyword.split(""))];
 
   return (
     <div className="space-y-4 h-[300px] overflow-y-auto p-4">
@@ -22,9 +26,13 @@ export function NoteList(props: NoteItemProps) {
             onMouseLeave={() => setCanDelete(false)}
           >
             <div className="flex justify-between">
-              <h3 className="text-xl">
+              <h3 className={`text-xl ${note.deletedAt && "line-through"}`}>
                 <a href="" onClick={(event) => openInEditor(event, note.id)}>
-                  {note.title}
+                  <Highlighter
+                    highlightClassName="bg-blue-400 text-white font-bold"
+                    searchWords={searchWords}
+                    textToHighlight={note.title}
+                  />
                 </a>
               </h3>
 

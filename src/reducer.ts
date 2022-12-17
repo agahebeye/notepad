@@ -1,24 +1,32 @@
 import type { Category, Note } from "./types"
 import { categories } from "./data";
 
+export type initialStateType = {
+    editorOpen: boolean,
+    currentNoteId: string | number | undefined,
+    notes: Note[],
+    categories: Category[]
+}
+
 export type ActionType =
     | { type: 'openEditor'; payload: boolean }
     | { type: 'closeEditor'; payload: boolean }
     | { type: 'addNote'; payload: Note }
     | { type: 'setNotes'; payload: Note[] }
     | { type: 'deleteNote'; payload: string }
+    | { type: 'forceDeleteNote'; payload: string }
     | { type: 'setCurrentNoteId'; payload: string | number | undefined }
     | { type: 'addCategory'; payload: Category }
 
 
-export const initialState = JSON.parse(localStorage.getItem('app-store')!) ?? {
+export const initialState = (JSON.parse(localStorage.getItem('app-store')!) ?? {
     editorOpen: false,
-    currentNoteId: 0 as string | number | undefined,
-    notes: [] as Note[],
-    categories: categories as Category[]
-}
+    currentNoteId: 0,
+    notes: [],
+    categories: categories
+}) as initialStateType
 
-export function reducer(state: typeof initialState, action: ActionType) {
+export function reducer(state: initialStateType, action: ActionType) {
     switch (action.type) {
         case "openEditor":
         case "closeEditor":
@@ -42,7 +50,17 @@ export function reducer(state: typeof initialState, action: ActionType) {
         case "deleteNote":
             return {
                 ...state,
-                notes: state.notes.filter((note: Note) => note.id !== action.payload)
+                notes: state.notes.map((note) => {
+                    return note.id === action.payload
+                        ? { ...note, deletedAt: new Date().toDateString() }
+                        : note
+                })
+            }
+
+        case "forceDeleteNote":
+            return {
+                ...state,
+                notes: state.notes.filter((note) => note.deletedAt)
             }
 
         case "setCurrentNoteId":
