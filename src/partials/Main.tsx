@@ -32,14 +32,21 @@ export function Main(props: MainProps) {
       ? defaultNotes
       : filteredNotes;
 
-  const resultsText =
-    keyword.length > 0
-      ? "found"
-      : filtered.value !== "All Notes"
-      ? `in ${filtered.value} category`
-      : "";
+  const resultsText = (
+    <span>
+      {keyword.length > 0 && " found "}
+      {filtered.value !== "All Notes" && (
+        <span>
+          in{" "}
+          <strong className="bg-blue-400 px-0.5 text-white">
+            {filtered.value}
+          </strong>{" "}
+          category
+        </span>
+      )}
+    </span>
+  );
 
-      console.log(notes)
   console.log("main rendered");
 
   return props.state.notes.length > 0 ? (
@@ -50,10 +57,11 @@ export function Main(props: MainProps) {
         onChange={setFiltered}
       />
 
-      <header className="space-y-3 my-6">
-        <div className="note-count">
-          <span className="font-bold">{notes.length} </span>
-          note(s) <span>{resultsText}</span>
+      <header className="space-y-4 my-6">
+        <div className="text-sm">
+          <span className="font-bold">{notes.length}</span>
+          <span> note(s)</span>
+          {resultsText}
         </div>
 
         <input
@@ -95,41 +103,26 @@ export function Main(props: MainProps) {
 
   function getFilteredNotes() {
     return React.useMemo(() => {
-      let results = [] as Note[];
+      let results = props.state.notes;
 
       if (keyword.length > 0) {
         const regex = new RegExp(`${keyword}`, "ig");
 
-        results = [
-          ...results,
-          ...props.state.notes.filter((note) => {
-            return note.title.match(regex);
-          }),
-        ];
-
-        console.log(results);
+        results = results.filter((note) => {
+          return note.title.match(regex);
+        });
       }
 
       switch (filtered.key) {
         case "category":
-          results = [
-            ...results,
-            ...props.state.notes.filter(
-              (note) => note.category === filtered.value
-            ),
-          ];
+          results = results.filter((note) => note.category === filtered.value);
           break;
         case "favourite":
-          results = [
-            ...results,
-            ...props.state.notes.filter((note) => note.favourite),
-          ];
+          results = results.filter((note) => note.favourite);
+
           break;
         case "deleted":
-          results = [
-            ...results,
-            ...props.state.notes.filter((note) => note.deletedAt),
-          ];
+          results = results.filter((note) => note.deletedAt);
           break;
       }
 
