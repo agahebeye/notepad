@@ -127,6 +127,6 @@ export function Main(props: MainProps) {
       }
 
       return results;
-    }, [keyword, filtered]);
+    }, [keyword, filtered, props.state.notes]);
   }
 }

@@ -13,8 +13,7 @@ export type ActionType =
     | { type: 'closeEditor'; payload: boolean }
     | { type: 'addNote'; payload: Note }
     | { type: 'setNotes'; payload: Note[] }
-    | { type: 'deleteNote'; payload: string }
-    | { type: 'forceDeleteNote'; payload: string }
+    | { type: 'deleteNote'; payload: Note }
     | { type: 'setCurrentNoteId'; payload: string | number | undefined }
     | { type: 'addCategory'; payload: Category }
 
@@ -48,19 +47,16 @@ export function reducer(state: initialStateType, action: ActionType) {
             }
 
         case "deleteNote":
-            return {
-                ...state,
-                notes: state.notes.map((note) => {
-                    return note.id === action.payload
+            const notes = action.payload.deletedAt
+                ? state.notes.filter(note => note.id !== action.payload.id)
+                : state.notes.map((note) => {
+                    return note.id === action.payload.id
                         ? { ...note, deletedAt: new Date().toDateString() }
                         : note
                 })
-            }
-
-        case "forceDeleteNote":
             return {
                 ...state,
-                notes: state.notes.filter((note) => note.deletedAt)
+                notes
             }
 
         case "setCurrentNoteId":

@@ -27,7 +27,7 @@ export function NoteList(props: NoteItemProps) {
           >
             <div className="flex justify-between">
               <h3 className={`text-xl ${note.deletedAt && "line-through"}`}>
-                <a href="" onClick={(event) => openInEditor(event, note.id)}>
+                <a href="" onClick={(event) => openInEditor(event, note)}>
                   <Highlighter
                     highlightClassName="bg-blue-400 text-white font-bold"
                     searchWords={searchWords}
@@ -37,7 +37,7 @@ export function NoteList(props: NoteItemProps) {
               </h3>
 
               {canDelete && (
-                <button onClick={() => deleteNote(note.id as string)}>
+                <button onClick={() => deleteNote(note)}>
                   <XMarkIcon className="w-5 h-5 text-blue-400" />
                 </button>
               )}
@@ -55,14 +55,16 @@ export function NoteList(props: NoteItemProps) {
     </div>
   );
 
-  function openInEditor(event: React.MouseEvent, id: string | number) {
+  function openInEditor(event: React.MouseEvent, note: Note) {
     event.preventDefault();
-    props.dispatch({ type: "setCurrentNoteId", payload: id });
+
+    if (note.deletedAt) return;
+
+    props.dispatch({ type: "setCurrentNoteId", payload: note.id });
     props.dispatch({ type: "openEditor", payload: true });
   }
 
-  function deleteNote(id: string) {
-    props.dispatch({ type: "deleteNote", payload: id });
-    console.log("deleted");
+  function deleteNote(note: Note) {
+    props.dispatch({ type: "deleteNote", payload: note });
   }
 }
