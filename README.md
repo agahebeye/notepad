@@ -1,4 +1,4 @@
-# Notepad
+# Notetaker
 
 **Notepad** is a simple yet a feature-rich note application created with React.js and Typescript.
 
